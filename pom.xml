@@ -54,10 +54,20 @@
             <email>pteyer@salesforce.com</email>
             <organization>Salesforce</organization>
             <organizationUrl>https://www.salesforce.com/</organizationUrl>
-            <roles>
-                <role>owner</role>
-                <role>developer</role>
-            </roles>
+        </developer>
+        <developer>
+            <id>btoal</id>
+            <name>Brian Toal</name>
+            <email>btoal@salesforce.com</email>
+            <organization>Salesforce</organization>
+            <organizationUrl>https://www.salesforce.com/</organizationUrl>
+        </developer>
+        <developer>
+            <id>bmccready</id>
+            <name>Bruce McCready</name>
+            <email>bmccready@salesforce.com</email>
+            <organization>Salesforce</organization>
+            <organizationUrl>https://www.salesforce.com/</organizationUrl>
         </developer>
     </developers>
 
