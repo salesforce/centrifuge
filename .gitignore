@@ -1,0 +1,48 @@
+# eclipse
+.project
+.classpath
+.settings
+
+target/
+apidocs/
+logs/
+*.class
+*.log
+
+# Package Files #
+*.war
+*.ear
+
+# IntelliJ
+.idea/
+*.iml
+
+# mac stuff
+.DS_Store
+
+# vim
+*.swp
+
+# testng
+test-output
+
+# mvn release
+*.releaseBackup
+release.properties
+
+# checkstyle ignore rules
+.checkstyle
+
+# Ignore drone secret file
+.drone.sec.yml
+
+# Ignore JFR's
+*.jfr
+
+# Ignore PMD files
+.pmd
+.pmdruleset.xml
+
+*.swo
+
+bin/

@@ -1,0 +1,174 @@
+<!--
+  ~ Copyright (c) 2018, salesforce.com, inc.
+  ~ All rights reserved.
+  ~ SPDX-License-Identifier: BSD-3-Clause
+  ~ For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.salesforce.centrifuge</groupId>
+    <artifactId>centrifuge</artifactId>
+    <name>centrifuge</name>
+    <description>Warmup Engine</description>
+    <packaging>pom</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <properties>
+        <source.version>1.8</source.version>
+        <target.version>1.8</target.version>
+
+        <slf4j-api.version>1.7.25</slf4j-api.version>
+        <guava.version>26.0-jre</guava.version>
+        <logback-classic.version>1.2.3</logback-classic.version>
+        <typesafe-config.version>1.3.1</typesafe-config.version>
+        <testng.version>6.14.3</testng.version>
+        <httpclient.version>4.5.6</httpclient.version>
+        <jettyserver.version>9.4.12.v20180830</jettyserver.version>
+
+        <mvn.plugins.compiler.version>2.5.1</mvn.plugins.compiler.version>
+        <mvn.plugins.javadoc.version>2.10.1</mvn.plugins.javadoc.version>
+        <mvn.plugins.resources.version>2.7</mvn.plugins.resources.version>
+        <mvn.plugins.source.version>2.4</mvn.plugins.source.version>
+        <mvn.plugins.release.version>2.5.3</mvn.plugins.release.version>
+    </properties>
+
+    <modules>
+        <module>centrifuge-core</module>
+        <module>centrifuge-warmers</module>
+    </modules>
+
+    <scm>
+        <connection>scm:git:git:github.com/salesforce/centrifuge.git</connection>
+        <developerConnection>scm:git:git@github.com:salesforce/centrifuge.git</developerConnection>
+        <url>https://github.com/salesforce/centrifuge</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>pteyer</id>
+            <name>Paymon Teyer</name>
+            <email>pteyer@salesforce.com</email>
+            <organization>Salesforce</organization>
+            <organizationUrl>https://www.salesforce.com/</organizationUrl>
+            <roles>
+                <role>owner</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback-classic.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.typesafe</groupId>
+                <artifactId>config</artifactId>
+                <version>${typesafe-config.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-server</artifactId>
+                <version>${jettyserver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>${testng.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <!--COMPILER-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${mvn.plugins.compiler.version}</version>
+                <configuration>
+                    <source>${source.version}</source>
+                    <target>${target.version}</target>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <!--INCLUDE SOURCE-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${mvn.plugins.source.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <!--JAVADOC-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${mvn.plugins.javadoc.version}</version>
+                <configuration>
+                    <outputDirectory>apidocs/</outputDirectory>
+                    <author>false</author>
+                    <show>public</show>
+                    <source>${source.version}</source>
+                    <version>true</version>
+                    <windowtitle>centrifuge</windowtitle>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--RELEASE-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${mvn.plugins.release.version}</version>
+                <configuration>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
