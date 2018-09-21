@@ -63,6 +63,13 @@
             <organizationUrl>https://www.salesforce.com/</organizationUrl>
         </developer>
         <developer>
+            <id>dtupper</id>
+            <name>Dean Tupper</name>
+            <email>dtupper@salesforce.com</email>
+            <organization>Salesforce</organization>
+            <organizationUrl>https://www.salesforce.com/</organizationUrl>
+        </developer>
+        <developer>
             <id>bmccready</id>
             <name>Bruce McCready</name>
             <email>bmccready@salesforce.com</email>
