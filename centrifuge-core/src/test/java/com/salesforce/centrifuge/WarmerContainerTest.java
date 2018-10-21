@@ -40,7 +40,7 @@ public class WarmerContainerTest {
     public void testWarmerContainerLifecycle() throws Exception {
         final WarmerConfig config = new WarmerConfig();
         config.setWarmerName("test-sleep-warmer");
-        config.setWarmerClass(SleepWarmer.class.getCanonicalName());
+        config.setWarmerClass(SleepWarmer.class);
         config.setMaxIterations(2);
         config.setTimeoutMillis(100000);
 
@@ -62,7 +62,7 @@ public class WarmerContainerTest {
     public void testDoCallThrowingException() throws Exception {
         final WarmerConfig config = new WarmerConfig();
         config.setWarmerName("test-sleep-warmer")
-                .setWarmerClass(SleepWarmer.class.getCanonicalName())
+                .setWarmerClass(SleepWarmer.class)
                 .setMaxIterations(2)
                 .setTimeoutMillis(10);
 

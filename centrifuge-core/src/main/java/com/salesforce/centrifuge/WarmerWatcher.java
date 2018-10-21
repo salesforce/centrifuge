@@ -21,7 +21,7 @@ import static com.salesforce.centrifuge.Constants.LOGGER_PREFIX;
 /**
  * Works as a contained callable class to initialize and execute warmers.
  */
-public class WarmerWatcher {
+class WarmerWatcher {
     private final Logger logger = LoggerFactory.getLogger(WarmerWatcher.class);
 
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor(

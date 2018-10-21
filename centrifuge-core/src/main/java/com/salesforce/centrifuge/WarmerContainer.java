@@ -46,6 +46,9 @@ public class WarmerContainer {
     // set to true when stop() is called
     private volatile boolean isStopped = false;
 
+    // set to true when all iterations are completed successfully
+    private volatile boolean isCompleted = false;
+
     // set to true the first time next() is called; back to false when it is finished
     private volatile boolean isRunning = false;
 
@@ -80,7 +83,7 @@ public class WarmerContainer {
             throws Exception {
         this.config = config;
         this.executorService = executorService;
-        this.warmerClass = getClass().getClassLoader().loadClass(config.getWarmerClass());
+        this.warmerClass = config.getWarmerClass();
         this.warmer = (Warmer) this.warmerClass.newInstance();
     }
 
@@ -110,6 +113,10 @@ public class WarmerContainer {
 
     public boolean isStopped() {
         return this.isStopped;
+    }
+
+    public boolean isCompleted() {
+        return this.isCompleted;
     }
 
     public boolean isRunning() {
@@ -231,6 +238,7 @@ public class WarmerContainer {
         if (getIteration() == getWarmerConfig().getMaxIterations()) {
             logger.info(LOGGER_PREFIX + "warmer {} reached max iterations {}.",
                     getName(), getWarmerConfig().getMaxIterations());
+            this.isCompleted = true;
             return false;
         }
         // stop if interrupted

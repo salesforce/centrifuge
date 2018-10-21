@@ -18,14 +18,6 @@ import static org.testng.Assert.*;
 @Test(singleThreaded = true)
 public class CentrifugeImplTest {
     @Test
-    public void testRegisterWarmer() {
-        new CentrifugeImpl(new CentrifugeConfig().addWarmerConfig(
-                new WarmerConfig().setWarmerClass("invalid.class")
-        ));
-        assertTrue(true);
-    }
-
-    @Test
     public void testRegisterMbean() throws Exception {
         final CentrifugeImpl centrifuge = new CentrifugeImpl(new CentrifugeConfig());
         final String mbeanName = centrifuge.getMbeanName();

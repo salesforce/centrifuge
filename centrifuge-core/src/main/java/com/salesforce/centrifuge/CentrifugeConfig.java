@@ -30,6 +30,7 @@ public class CentrifugeConfig {
     private final List<WarmerConfig> warmerConfigs = new CopyOnWriteArrayList<>();
 
     public CentrifugeConfig() {
+        // no-op
     }
 
     /**
@@ -71,7 +72,8 @@ public class CentrifugeConfig {
 
                 // init warmer config
                 final WarmerConfig warmerConfig = new WarmerConfig();
-                warmerConfig.setWarmerClass(c.getString(CONFIG_KEY_CLASS));
+                final Class warmerClass = getClass().getClassLoader().loadClass(c.getString(CONFIG_KEY_CLASS));
+                warmerConfig.setWarmerClass(warmerClass);
                 if (c.hasPath(CONFIG_KEY_NAME)) {
                     warmerConfig.setWarmerName(c.getString(CONFIG_KEY_NAME));
                 }

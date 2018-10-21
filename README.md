@@ -1,11 +1,8 @@
 # Centrifuge Warmup Engine
 
 Centrifuge is a framework for scheduling and running startup and warmup tasks; mostly used for JVM warmup.  
-JVM does not perform ideally at startup until JIT performs compilation of frequently executed code paths.  
-This has high performance impact on JVM restarts.  Centrifuge provides a generic interface for implementing 
-various warmup logic (e.g., simply calling an HTTP endpoint, populating cache, pre-compilation for generated 
-code, etc.), and thread management for executing the warmup code.  A warmer implementation is executed over and over
-until either it times out or the maximum number of iterations asked by user is reached.
+It provides an interface for implementing warmup logic (e.g., calling an HTTP endpoint, or populating cache, or 
+pre-compilation for generated code). Centrifuge is responsible for thread management and execution of  warmup code.  
 
 ### How to use?
 
@@ -30,8 +27,8 @@ public interface Warmer {
 
     /**
      * This method is called at the beginning of execution; if an exception
-     * is thrown, centrifuge pauses (thread sleeps) for a configurable
-     * duration, and then retries calling init.
+     * is thrown, centrifuge yields, and then retries calling init, until maximum
+     * number of failures allowed is reached.
      *
      * @param params parameters passed from config file
      */
@@ -47,7 +44,39 @@ public interface Warmer {
 }
 ```
 
-Add configurations to register warmer (the `EchoWarmer` is a simple warmer example):
+Register warmers either programmatically like this:
+
+```java
+public static void main(final String[] args) throws Exception {
+
+    // warmer config contains configurations used to execute a warmer
+    final WarmerConfig warmerConfig = new WarmerConfig();
+    warmerConfig.setWarmerClass(EchoWarmer.class);
+    warmerConfig.setMaxIterations(10);
+    warmerConfig.setMaxFailure(3);
+    warmerConfig.setTimeoutMillis(1000);
+    warmerConfig.setRequired(true);
+    final Map<String, Object> params = new HashMap<>();
+    params.put("text", "echo is a sample warmer...");
+    warmerConfig.setParams(params);
+
+    final CentrifugeConfig centrifugeConfig = new CentrifugeConfig();
+    // add the warmer config from ^^ to centrifuge config
+    centrifugeConfig.addWarmerConfig(warmerConfig);
+
+    // get a new instance and start the engine
+    final Centrifuge centrifuge = Centrifuge.newInstance(centrifugeConfig);
+    centrifuge.start();
+
+    // check whether all *required* warmers are stopped (either completed successfully or reached maximum failure)
+    // note that *non-required* warmers may still be running and will continue to run
+    while (!centrifuge.isWarm()) {
+        // wait until is warm, then ping up to be put into rotation
+    }
+}
+```
+
+Or descriptively by adding configurations similar to what is shown below to register warmers:
 
 ```java
 // configuration for warmup engine
@@ -56,7 +85,7 @@ centrifuge {
   warmers = [
     {
       // warmer class name (required)
-      class = "com.salesforce.centrifuge.EchoWarmer"
+      class = "com.salesforce.centrifuge.EchoWarmer"  // echo warmer is a simple example warmer
       
       // flag to tell centrifuge that this warmer has to finish executing before app is warm (optional, default = false)
       required = false
@@ -85,7 +114,7 @@ centrifuge {
 }
 ```
 
-Initialize the Centrifuge engine:
+Then initialize, start, and check for status:
 
 ```java
 public static void main(final String[] args) throws Exception {
@@ -96,13 +125,20 @@ public static void main(final String[] args) throws Exception {
     // create an instance and start
     final Centrifuge centrifuge = Centrifuge.newInstance(centrifugeConfig);
     centrifuge.start();
+    
+    // ...
+    
+    // check whether all *required* warmers have successfully completed
+    // note that *non-required* warmers may still be running and will continue to run
+    while (!centrifuge.isWarm()) {
+        // wait until is warm, then ping up to be put into rotation
+    }
 }
 ```
 
-### Warmers
+#### HTTP Warmer
 
-A number of commonly used warmers are implemented in the `centrifuge-warmer` module;  Include the following maven 
-dependency to pull them in to your project:
+Include the following maven dependency to pull this warmer into your project:
 
 ```xml
 <dependency>
@@ -112,22 +148,18 @@ dependency to pull them in to your project:
 </dependency>
 ```
 
-Below is the list of warmers available:
-
-#### HTTP Warmer
-
-The HTTP Warmer can be used as a generic warmer to call HTTP endpoints in order to trigger code path exercised by the
+The HTTP Warmer can be used as a very simple warmer to call HTTP endpoints in order to trigger code path exercised by the
 resource implementing the endpoint.  For example, an application may provide a homepage URL that when called would do
-basic initializations, connect to a database and cache, etc.  These code paths may be warmed (JITed) by simply using 
-the HTTP warmer to hit the homepage endpoint for a number of iterations.
+basic initializations, connect to a database and cache, etc.  These code paths can be warmed (JITed) by simply using 
+the HTTP warmer to hit the homepage endpoint for some relatively large number of iterations.
 
-Here is an example of how to use this warmer:
+Here is an example of how to use the HTTP warmer:
 
 ```java
 {
   class = "com.salesforce.centrifuge.warmers.HttpWarmer"
-  max_iterations = 1000
-  timeout_millis = 5000
+  max_iterations = 1000  // make maximum of 1000 http calls
+  timeout_millis = 30000  // kill after 30 seconds
   params = {
     method = "post"
     urls = [ "http://localhost:8080/foo/bar", "http://localhost:8080/bar/baz" ]

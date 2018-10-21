@@ -11,6 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.testng.Assert.*;
 
 public class CentrifugeTest {
@@ -30,7 +33,7 @@ public class CentrifugeTest {
     public void testCounterWarmer() throws Exception {
         final WarmerConfig counterConfig = new WarmerConfig()
                 .setWarmerName("test-counter-warmer")
-                .setWarmerClass(CounterWarmer.class.getCanonicalName())
+                .setWarmerClass(CounterWarmer.class)
                 .setMaxIterations(-1)
                 .setConcurrency(10)
                 .setTimeoutMillis(3000);
@@ -54,5 +57,30 @@ public class CentrifugeTest {
             logger.info("waiting for centrifuge to finish...");
         }
         assertTrue(CounterWarmer.isInitCalled);
+    }
+
+    @Test
+    public void test() throws Exception {
+        final WarmerConfig warmerConfig = new WarmerConfig();
+        warmerConfig.setWarmerClass(EchoWarmer.class);
+        warmerConfig.setMaxIterations(10);
+        warmerConfig.setMaxFailure(3);
+        warmerConfig.setTimeoutMillis(1000);
+        warmerConfig.setRequired(true);
+        final Map<String, Object> params = new HashMap<>();
+        params.put("text", "echo is a sample warmer...");
+        warmerConfig.setParams(params);
+
+        final CentrifugeConfig centrifugeConfig = new CentrifugeConfig();
+        centrifugeConfig.addWarmerConfig(warmerConfig);
+
+        final Centrifuge centrifuge = Centrifuge.newInstance(centrifugeConfig);
+        centrifuge.start();
+
+        while (!centrifuge.isWarm()) {
+            Thread.sleep(10);
+        }
+
+        logger.info("finished.");
     }
 }

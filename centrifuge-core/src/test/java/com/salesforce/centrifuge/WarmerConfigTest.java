@@ -27,9 +27,6 @@ public class WarmerConfigTest {
         assertEquals(warmerConfig.getMaxFailure(), WarmerConfig.DEFAULT_MAX_FAILURE);
         assertEquals(warmerConfig.getParams(), Collections.emptyMap());
 
-        final String randomClassName = UUID.randomUUID().toString();
-        assertEquals(warmerConfig.setWarmerClass(randomClassName).getWarmerClass(), randomClassName);
-
         final int randomNegativeNumber = -1 * Math.abs(new Random().nextInt());
         assertEquals(warmerConfig.setMaxIterations(randomNegativeNumber).getMaxIterations(), randomNegativeNumber);
         assertEquals(warmerConfig.setTimeoutMillis(randomNegativeNumber).getTimeoutMillis(), WarmerConfig.DEFAULT_TIMEOUT_MILLIS);

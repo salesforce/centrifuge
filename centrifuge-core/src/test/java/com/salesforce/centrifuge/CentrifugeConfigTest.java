@@ -27,26 +27,26 @@ public class CentrifugeConfigTest {
         Files.copy(getClass().getResourceAsStream("/centrifuge-config-test.conf"), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         final CentrifugeConfig centrifugeConfig = new CentrifugeConfig(tempFile.getAbsolutePath());
         assertEquals(centrifugeConfig.getWarmerConfigs().size(), 1);
-        assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getWarmerClass(), "foo.bar.baz");
+        assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getWarmerClass(), EchoWarmer.class);
         assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getMaxIterations(), 7777);
-        assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getTimeoutMillis(), 7);
+        assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getTimeoutMillis(), 1000);
         assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getYieldMillis(), 77);
         assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getMaxFailure(), 777);
-        assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getConcurrency(), 7777);
+        assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getConcurrency(), 7);
         assertTrue(centrifugeConfig.getWarmerConfigs().get(0).isRequired());
-        assertEquals(String.valueOf(centrifugeConfig.getWarmerConfigs().get(0).getParams().get("foo")), "bar");
+        assertEquals(String.valueOf(centrifugeConfig.getWarmerConfigs().get(0).getParams().get("text")), "this is a sample warmer implementation");
     }
 
     @Test
     public void testConstructorWithResource() {
         final CentrifugeConfig centrifugeConfig = new CentrifugeConfig("centrifuge-config-test.conf");
         assertEquals(centrifugeConfig.getWarmerConfigs().size(), 1);
-        assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getWarmerClass(), "foo.bar.baz");
+        assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getWarmerClass(), EchoWarmer.class);
         assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getMaxIterations(), 7777);
-        assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getTimeoutMillis(), 7);
+        assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getTimeoutMillis(), 1000);
         assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getYieldMillis(), 77);
         assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getMaxFailure(), 777);
-        assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getConcurrency(), 7777);
-        assertEquals(String.valueOf(centrifugeConfig.getWarmerConfigs().get(0).getParams().get("foo")), "bar");
+        assertEquals(centrifugeConfig.getWarmerConfigs().get(0).getConcurrency(), 7);
+        assertEquals(String.valueOf(centrifugeConfig.getWarmerConfigs().get(0).getParams().get("text")), "this is a sample warmer implementation");
     }
 }

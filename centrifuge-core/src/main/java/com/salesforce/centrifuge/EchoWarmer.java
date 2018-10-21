@@ -27,13 +27,14 @@ public class EchoWarmer implements Warmer {
     }
 
     @Override
-    public void init(final Map<String, Object> params) throws Exception {
+    public void init(final Map<String, Object> params) {
         logger.info(LOGGER_PREFIX + getClass().getSimpleName() + " init() called.");
         this.text = String.valueOf(params.get("text"));
     }
 
     @Override
-    public void next() throws Exception {
-        logger.info(LOGGER_PREFIX + getClass().getSimpleName() + " next() called; text is {}", this.text);
+    public void next() {
+        logger.info(LOGGER_PREFIX + getClass().getSimpleName() + " next() called; text is '{}'", this.text);
     }
+
 }

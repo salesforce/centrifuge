@@ -32,7 +32,7 @@ public class WarmerConfig {
     static final long DEFAULT_MAX_FAILURE = Long.getLong(PROPERTY_KEY_DEFAULT_MAX_FAILURE,
             PROPERTY_VALUE_DEFAULT_MAX_FAILURE);
 
-    private String warmerClass = "";
+    private Class<? extends Warmer> warmerClass = null;
     private String name = "";
     private int timeoutMillis = DEFAULT_TIMEOUT_MILLIS;
     private int yieldMillis = DEFAULT_YIELD_MILLIS;
@@ -85,7 +85,7 @@ public class WarmerConfig {
     }
 
     public String getWarmerName() {
-        return !Strings.isNullOrEmpty(this.name) ? this.name : this.warmerClass;
+        return !Strings.isNullOrEmpty(this.name) ? this.name : getWarmerClass().getName();
     }
 
     public WarmerConfig setWarmerName(final String name) {
@@ -93,11 +93,11 @@ public class WarmerConfig {
         return this;
     }
 
-    public String getWarmerClass() {
+    public Class<? extends Warmer> getWarmerClass() {
         return this.warmerClass;
     }
 
-    public WarmerConfig setWarmerClass(final String warmerClass) {
+    public WarmerConfig setWarmerClass(final Class<? extends Warmer> warmerClass) {
         this.warmerClass = warmerClass;
         return this;
     }

@@ -34,7 +34,7 @@ public final class CentrifugeImpl implements Centrifuge {
     private long startTimestampNanos = 0;
 
     @SuppressWarnings("unused")
-    protected CentrifugeImpl() {
+    CentrifugeImpl() {
         throw new UnsupportedOperationException();
     }
 
