@@ -56,6 +56,8 @@ public static void main(final String[] args) throws Exception {
     warmerConfig.setMaxFailure(3);
     warmerConfig.setTimeoutMillis(1000);
     warmerConfig.setRequired(true);
+    
+    // parameters to be passed to warmer on initialization
     final Map<String, Object> params = new HashMap<>();
     params.put("text", "echo is a sample warmer...");
     warmerConfig.setParams(params);
