@@ -5,8 +5,7 @@
   ~ For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.salesforce.centrifuge</groupId>
@@ -14,7 +13,8 @@
     <name>centrifuge</name>
     <description>Warmup Engine</description>
     <packaging>pom</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.3-SNAPSHOT</version>
+    <url>https://github.com/salesforce/centrifuge</url>
 
     <properties>
         <source.version>1.8</source.version>
@@ -32,6 +32,7 @@
         <mvn.plugins.javadoc.version>2.10.1</mvn.plugins.javadoc.version>
         <mvn.plugins.resources.version>2.7</mvn.plugins.resources.version>
         <mvn.plugins.source.version>2.4</mvn.plugins.source.version>
+        <mvn.plugins.gpg.version>1.6</mvn.plugins.gpg.version>
         <mvn.plugins.release.version>2.5.3</mvn.plugins.release.version>
     </properties>
 
@@ -40,12 +41,30 @@
         <module>centrifuge-warmers</module>
     </modules>
 
+    <licenses>
+        <license>
+            <name>BSD 3-Clause License</name>
+            <url>https://github.com/salesforce/centrifuge/blob/master/LICENSE.txt</url>
+        </license>
+    </licenses>
+
     <scm>
         <connection>scm:git:git:github.com/salesforce/centrifuge.git</connection>
         <developerConnection>scm:git:git@github.com:salesforce/centrifuge.git</developerConnection>
         <url>https://github.com/salesforce/centrifuge</url>
         <tag>HEAD</tag>
     </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus-oss</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>nexus-oss</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
 
     <developers>
         <developer>
@@ -164,14 +183,28 @@
                     <show>public</show>
                     <source>${source.version}</source>
                     <version>true</version>
-                    <windowtitle>centrifuge</windowtitle>
+                    <windowtitle>Centrifuge</windowtitle>
                 </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
-                        <phase>deploy</phase>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--GPG-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${mvn.plugins.gpg.version}</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
                         </goals>
                     </execution>
                 </executions>
