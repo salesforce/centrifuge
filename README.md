@@ -19,7 +19,7 @@ First include the maven dependency like this:
 Implement the `Warmer` interface; make sure:
 
 - Warmer has an accessible default constructor.
-- Warmer does not catch `InterruptedException`.
+- Warmer does not swallow `InterruptedException`.
 
 
 ```java
