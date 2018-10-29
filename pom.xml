@@ -13,7 +13,7 @@
     <name>centrifuge</name>
     <description>Warmup Engine</description>
     <packaging>pom</packaging>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <url>https://github.com/salesforce/centrifuge</url>
 
     <properties>
@@ -52,7 +52,7 @@
         <connection>scm:git:git:github.com/salesforce/centrifuge.git</connection>
         <developerConnection>scm:git:git@github.com:salesforce/centrifuge.git</developerConnection>
         <url>https://github.com/salesforce/centrifuge</url>
-        <tag>v1.0.2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
