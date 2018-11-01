@@ -1,12 +1,18 @@
 # Centrifuge Warmup Engine
 
-Centrifuge is a framework for scheduling and running startup and warmup tasks; mostly used for JVM warmup.  
-It provides an interface for implementing warmup logic (e.g., calling an HTTP endpoint, or populating cache, or 
-pre-compilation for generated code). Centrifuge is responsible for thread management and execution of  warmup code.  
+Centrifuge is a framework for scheduling and running startup and warmup tasks.
+It is focused mainly on accelerating JVM restarts, and provides an interface for 
+implementing warmup tasks, such as:
 
-### How to use?
+- calling an HTTP endpoint
+- populating caches 
+- handling pre-compilation tasks for generated code
 
-First include the maven dependency like this:
+Centrifuge is responsible for executing these warmup tasks and managing threads.
+
+### How to Use Centrifuge
+
+First, include a Maven dependency for Centrifuge in your POM:
 
 ```xml
 <dependency>
@@ -16,11 +22,11 @@ First include the maven dependency like this:
 </dependency>
 ```
 
-Implement the `Warmer` interface; make sure:
+Now implement the `Warmer` interface for each of your warmup tasks.
+Make sure your warmer class
 
-- Warmer has an accessible default constructor.
-- Warmer does not swallow `InterruptedException`.
-
+- has an accessible default constructor
+- does not swallow `InterruptedException`
 
 ```java
 public interface Warmer {
@@ -44,7 +50,9 @@ public interface Warmer {
 }
 ```
 
-Register warmers either programmatically like this:
+You can register your warmers either programmatically, with code,
+or descriptively, with a configuration file. To register a warmer programmatically,
+write code like this:
 
 ```java
 public static void main(final String[] args) throws Exception {
@@ -78,7 +86,9 @@ public static void main(final String[] args) throws Exception {
 }
 ```
 
-Or descriptively by adding configurations similar to what is shown below to register warmers:
+Registering warmers descriptively within a configuration file lets you add and remove warmers without 
+recompiling. To register a warmer descriptively, create a `centrifuge.conf` configuration file that looks
+like this:
 
 ```java
 // configuration for warmup engine
@@ -116,7 +126,7 @@ centrifuge {
 }
 ```
 
-Then initialize, start, and check for status:
+Then load the configuration file into Centrifuge like this:
 
 ```java
 public static void main(final String[] args) throws Exception {
@@ -140,7 +150,10 @@ public static void main(final String[] args) throws Exception {
 
 #### HTTP Warmer
 
-Include the following maven dependency to pull this warmer into your project:
+We provide a simple HTTP warmer to call HTTP endpoints in order to trigger code path exercised by the
+resource implementing the endpoint.
+
+Include this Maven dependency to pull the HTTP warmer into your project:
 
 ```xml
 <dependency>
@@ -150,12 +163,10 @@ Include the following maven dependency to pull this warmer into your project:
 </dependency>
 ```
 
-The HTTP Warmer can be used as a very simple warmer to call HTTP endpoints in order to trigger code path exercised by the
-resource implementing the endpoint.  For example, an application may provide a homepage URL that when called would do
-basic initializations, connect to a database and cache, etc.  These code paths can be warmed (JITed) by simply using 
-the HTTP warmer to hit the homepage endpoint for some relatively large number of iterations.
-
-Here is an example of how to use the HTTP warmer:
+Suppose an application provides a homepage URL that, when called, performs
+basic initialization, connects to a database, populates caches, etc. The HTTP warming can warm these 
+code paths simply by using the HTTP warmer to hit the homepage endpoint a sufficiently large number of times.
+The following configuration file sets up the HTTP warmer to do this:
 
 ```java
 {
@@ -173,14 +184,14 @@ Here is an example of how to use the HTTP warmer:
 }
 ```
 
-### Development
+### Want to Contribute to Centrifuge?
 
-Clone the repository:
+Just clone the repository:
 ```bash
 $ git clone https://github.com/salesforce/centrifuge.git
 ```
 
-Compile like this:
+Then compile and test like this:
 ```bash
 $ cd centrifuge/
 $ ./bang.sh
