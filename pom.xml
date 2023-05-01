@@ -24,7 +24,7 @@
         <guava.version>29.0-jre</guava.version>
         <logback-classic.version>1.2.3</logback-classic.version>
         <typesafe-config.version>1.4.1</typesafe-config.version>
-        <testng.version>6.14.3</testng.version>
+        <testng.version>7.7.0</testng.version>
         <httpclient.version>4.5.13</httpclient.version>
         <jettyserver.version>9.4.41.v20210516</jettyserver.version>
 
