@@ -21,7 +21,7 @@ public class CentrifugeConfigTest {
 
     @Test
     public void testConstructorWithFile() throws IOException {
-        final File tempFile = File.createTempFile("centrifuge-config", ".conf");
+        final File tempFile = Files.createTempFile("centrifuge-config", ".conf").toFile();
         tempFile.deleteOnExit();
 
         Files.copy(getClass().getResourceAsStream("/centrifuge-config-test.conf"), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
